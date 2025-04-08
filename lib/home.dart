@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   children: [
                     Icon(Icons.circle, color: Colors.brown, size: 24),
-                    SizedBox(width: 5),
+                    SizedBox(width: 6),
                     Text('12', style: TextStyle(fontSize: 16)),
                   ],
                 ),
