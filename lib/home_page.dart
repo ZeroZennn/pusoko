@@ -6,13 +6,17 @@ import 'home_page.dart';
 import 'scanner.dart';
 import 'about.dart';
 import 'profile.dart';
+import 'trade.dart';
+
+import 'custom_scaffold.dart';
 
 class HomePageScreen extends StatelessWidget {
   const HomePageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
+      currentIndex: 0, // 0 = Home
       resizeToAvoidBottomInset: false,
       // AppBar
       appBar: PreferredSize(
@@ -67,10 +71,11 @@ class HomePageScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildCardIcon("Exchange", Icons.swap_horiz),
-                      buildCardIcon("Trade", Icons.swap_horiz),
+                      buildCardIcon("Exchange", Icons.swap_horiz, context),
+                      buildCardIcon("Trade", Icons.swap_horiz, context),
                     ],
                   ),
+
                   const SizedBox(height: 16), // Jarak antar baris
                   // Baris 2
                   Row(
@@ -179,85 +184,6 @@ class HomePageScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ),
-      ),
-
-      // Floating Scan Button
-      floatingActionButton: SizedBox(
-        height: 70,
-        width: 70,
-        child: FloatingActionButton(
-          onPressed: () {
-            // Aksi tombol scan
-          },
-          backgroundColor: const Color(0xFFA46420),
-          elevation: 4,
-          splashColor: Colors.transparent,
-          highlightElevation: 0,
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-
-          shape: const CircleBorder(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.camera_alt, size: 24, color: Colors.white),
-              SizedBox(height: 2),
-              Text('Scan', style: TextStyle(fontSize: 10, color: Colors.white)),
-            ],
-          ),
-        ),
-      ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomAppBar(
-        clipBehavior: Clip.none,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 0,
-        color: Colors.white,
-        elevation: 10,
-        child: SizedBox(
-          height: 80, // Perbesar agar icon dan teks muat
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: buildNavItem(
-                  Icons.home,
-                  'Home',
-                  HomePageScreen(),
-                  context,
-                ),
-              ),
-              Expanded(
-                child: buildNavItem(
-                  Icons.book,
-                  'Collection',
-                  CollectionScreen(),
-                  context,
-                ),
-              ),
-              const SizedBox(width: 40), // Untuk lubang FAB
-              Expanded(
-                child: buildNavItem(
-                  Icons.attach_file,
-                  'About',
-                  AboutScreen(),
-                  context,
-                ),
-              ),
-              Expanded(
-                child: buildNavItem(
-                  Icons.person,
-                  'Profile',
-                  ProfileScreen(),
-                  context,
-                ),
-              ),
-            ],
           ),
         ),
       ),
@@ -400,8 +326,9 @@ class HomePageScreen extends StatelessWidget {
   }
 
   // Fungsi untuk membuat Card trade agar tidak duplikatif
-  Widget buildCardIcon(String title, IconData icon) {
-    return Container(
+
+  Widget buildCardIcon(String title, IconData icon, BuildContext context) {
+    final card = Container(
       width: 190,
       height: 160,
       decoration: BoxDecoration(
@@ -431,6 +358,24 @@ class HomePageScreen extends StatelessWidget {
         ],
       ),
     );
+
+    final interactiveCard = MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap:
+            title == "Trade"
+                ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TradeScreen()),
+                  );
+                }
+                : null,
+        child: card,
+      ),
+    );
+
+    return interactiveCard;
   }
 
   // Fungsi untuk membuat WeaponCard agar bisa dipakai berulang

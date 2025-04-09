@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'home_page.dart';
 import 'scanner.dart';
 import 'about.dart';
 import 'profile.dart';
@@ -112,11 +112,39 @@ class CollectionScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(child: _buildNavItem(Icons.home, "Home", context, HomeScreen())),
-              Flexible(child: _buildNavItem(Icons.book, "Collection", context, CollectionScreen())),
+              Flexible(
+                child: _buildNavItem(
+                  Icons.home,
+                  "Home",
+                  context,
+                  HomePageScreen(),
+                ),
+              ),
+              Flexible(
+                child: _buildNavItem(
+                  Icons.book,
+                  "Collection",
+                  context,
+                  CollectionScreen(),
+                ),
+              ),
               Spacer(),
-              Flexible(child: _buildNavItem(Icons.info, "About", context, AboutScreen())),
-              Flexible(child: _buildNavItem(Icons.person, "Profile", context, ProfileScreen())),
+              Flexible(
+                child: _buildNavItem(
+                  Icons.info,
+                  "About",
+                  context,
+                  AboutScreen(),
+                ),
+              ),
+              Flexible(
+                child: _buildNavItem(
+                  Icons.person,
+                  "Profile",
+                  context,
+                  ProfileScreen(),
+                ),
+              ),
             ],
           ),
         ),
@@ -124,8 +152,11 @@ class CollectionScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.brown,
         shape: CircleBorder(),
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ScannerScreen())),
+        onPressed:
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => ScannerScreen()),
+            ),
         child: Icon(Icons.camera_alt, size: 28, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -133,14 +164,21 @@ class CollectionScreen extends StatelessWidget {
   }
 
   Widget _buildNavItem(
-      IconData icon, String label, BuildContext context, Widget screen) {
+    IconData icon,
+    String label,
+    BuildContext context,
+    Widget screen,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
           icon: Icon(icon, size: 34),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (_) => screen)),
+          onPressed:
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => screen),
+              ),
         ),
         Text(label, style: TextStyle(fontSize: 0)),
       ],
@@ -172,7 +210,10 @@ class CollectionScreen extends StatelessWidget {
           SizedBox(height: 8),
           Text(
             "Kujang",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
+            ),
           ),
           SizedBox(height: 8),
         ],
