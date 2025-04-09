@@ -5,6 +5,8 @@ import 'about.dart';
 import 'profile.dart';
 
 class CollectionScreen extends StatelessWidget {
+  const CollectionScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
