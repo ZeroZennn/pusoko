@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pusoko/home_page.dart';
+import 'package:pusoko/register.dart';
 
 void main() {
   runApp(
@@ -23,14 +24,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Logo dan Judul
             Row(
               children: [
-                Image.asset('assets/images/logo.png', width: 50,),
+                Image.asset('assets/images/logo.png', width: 50),
                 const SizedBox(width: 6),
                 const Text(
                   'Pusoko',
@@ -54,7 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   TextSpan(
                     text: 'User',
-                    style: TextStyle(color: Color(0xFF8A5A1F)),
+                    style: TextStyle(color: Color(0xFF8A5A1F),
+                    fontWeight: FontWeight.normal,),
                   ),
                 ],
               ),
@@ -168,14 +170,24 @@ class _LoginScreenState extends State<LoginScreen> {
             // Register
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   "Not a member? ",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
-                Text(
-                  "Register",
-                  style: TextStyle(fontSize: 12, color: Color(0xFF8A5A1F)),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Register",
+                    style: TextStyle(fontSize: 12, color: Color(0xFF8A5A1F)),
+                  ),
                 ),
               ],
             ),
