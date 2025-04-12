@@ -1,7 +1,53 @@
 import 'package:flutter/material.dart';
 import 'weapon_detail.dart';
-
 import 'custom_scaffold.dart';
+
+// Widget khusus untuk 1 card
+class WeaponCard extends StatelessWidget {
+  final String name;
+  final String imagePath;
+  final VoidCallback? onTap;
+
+  const WeaponCard({
+    super.key,
+    required this.name,
+    required this.imagePath,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 4,
+        child: Column(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class CollectionPageScreen extends StatelessWidget {
   const CollectionPageScreen({super.key});
@@ -9,65 +55,75 @@ class CollectionPageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      // body: Center(child: Text("Halaman Trade")),
-      currentIndex: 1, // sesuaikan dengan nav bar kamu
-      // AppBar
+      currentIndex: 1,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80), // tinggi AppBar
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-
-          // Posisikan logo di tengah AppBar
-          title: Center(child: Text('My Collection')),
-
-          // Kosongkan actions agar title tetap di tengah
+          title: const Center(child: Text('My Collection')),
           actions: const [SizedBox()],
         ),
       ),
-
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFAF8F6F), // bawah
-                Color(0xFFE6DCCF), // atas
-              ],
+              colors: [Color(0xFFAF8F6F), Color(0xFFE6DCCF)],
             ),
           ),
-
-          // ======== Content Start ========
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom: 100.0,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 16.0,
               ),
-
-              child: ListView(
-                shrinkWrap: true,
+              child: Column(
                 children: [
-                  // Baris 1
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildCardSearch("12", () {
-                        // Aksi saat tombol sort ditekan
-                        showModalBottomSheet(
-                          context: context,
-                          builder:
-                              (context) =>
-                                  const Text("Pilihan sort di sini..."),
-                        );
-                      }),
-                    ],
-                  ),
+                  buildCardSearch("12", () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder:
+                          (context) => const Text("Pilihan sort di sini..."),
+                    );
+                  }),
                   const SizedBox(height: 16),
+
+                  // ======== Grid Senjata Start ========
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics:
+                        const NeverScrollableScrollPhysics(), // Biar scroll nya tetap di SingleChildScrollView
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, // 3 kolom
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7, // Sesuaikan tinggi-lebar card
+                        ),
+                    itemCount: 9, // Jumlah senjata yang mau ditampilkan
+                    itemBuilder: (context, index) {
+                      return WeaponCard(
+                        name: "Kujang",
+                        imagePath: 'assets/images/kujang.png',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => WeaponDetailScreen(
+                                    name: "Kujang",
+                                    imagePath: 'assets/images/kujang.png',
+                                  ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  // ======== Grid Senjata End ========
                 ],
               ),
             ),
@@ -79,7 +135,7 @@ class CollectionPageScreen extends StatelessWidget {
 
   Widget buildCardSearch(String jumlah, VoidCallback onSortPressed) {
     return Container(
-      width: 400,
+      width: 900,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 255, 255, 255),
@@ -95,11 +151,9 @@ class CollectionPageScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row 1 - Icon Buku & Tombol Sort
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Kolom kiri: Icon buku dan angka
               Row(
                 children: const [
                   Icon(
@@ -117,14 +171,12 @@ class CollectionPageScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // Kolom kanan: Tombol sort
               GestureDetector(
                 onTap: onSortPressed,
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA46420),
+                    color: Color(0xFFA46420),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.sort, color: Colors.white),
@@ -132,13 +184,9 @@ class CollectionPageScreen extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
-          // Row 2 - Search bar dengan inner shadow
           Stack(
             children: [
-              // Simulasi inner shadow pakai container transparan dengan gradient
               Container(
                 height: 40,
                 decoration: BoxDecoration(
@@ -146,14 +194,13 @@ class CollectionPageScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              // Overlay untuk efek inner shadow
               Container(
                 height: 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   gradient: const LinearGradient(
                     colors: [
-                      Color.fromRGBO(0, 0, 0, 0.1), // shadow halus
+                      Color.fromRGBO(0, 0, 0, 0.1),
                       Colors.transparent,
                       Colors.transparent,
                       Color.fromRGBO(0, 0, 0, 0.1),
@@ -163,7 +210,6 @@ class CollectionPageScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Content: TextField dan icon search
               Container(
                 height: 40,
                 padding: const EdgeInsets.symmetric(horizontal: 12),

@@ -131,7 +131,11 @@ class HomePageScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WeaponDetailScreen(),
+                              builder:
+                                  (context) => WeaponDetailScreen(
+                                    name: "Kujang",
+                                    imagePath: 'assets/images/kujang.png',
+                                  ),
                             ),
                           );
                         },
@@ -150,7 +154,11 @@ class HomePageScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WeaponDetailScreen(),
+                              builder:
+                                  (context) => WeaponDetailScreen(
+                                    name: "Kujang",
+                                    imagePath: 'assets/images/kujang.png',
+                                  ),
                             ),
                           );
                         },
@@ -169,7 +177,11 @@ class HomePageScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WeaponDetailScreen(),
+                              builder:
+                                  (context) => WeaponDetailScreen(
+                                    name: "Kujang",
+                                    imagePath: 'assets/images/kujang.png',
+                                  ),
                             ),
                           );
                         },
