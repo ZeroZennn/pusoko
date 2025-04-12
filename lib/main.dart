@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'home_page.dart';
+import 'package:lottie/lottie.dart';
+import 'dart:async';
 import 'login.dart';
 
 void main() {
@@ -15,7 +15,43 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Pusoko',
-      home: const LoginScreen(),
+      home: const SplashScreen(), // Ubah jadi SplashScreen
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Navigasi ke LoginScreen setelah 3 detik
+    Timer(const Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white, // Ganti sesuai tema
+      body: Center(
+        child: Lottie.asset(
+          'assets/lottie/sword.json', // Pastikan path dan file sudah benar
+          width: 200,
+          height: 200,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 }
