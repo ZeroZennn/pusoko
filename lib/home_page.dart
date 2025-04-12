@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'weapon_detail.dart';
-import 'collection.dart';
-import 'home_page.dart';
-import 'scanner.dart';
-import 'about.dart';
-import 'profile.dart';
 import 'trade.dart';
 
 import 'custom_scaffold.dart';
@@ -47,8 +42,8 @@ class HomePageScreen extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFFE6DCCF), // atas
                 Color(0xFFAF8F6F), // bawah
+                Color(0xFFE6DCCF), // atas
               ],
             ),
           ),
