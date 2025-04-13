@@ -127,16 +127,23 @@ class HomePageScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: buildWeaponCard(
                         imagePath: 'assets/images/kujang.png',
-                        title: 'Katana Sakurai',
-                        description: 'Pedang Jepang tajam legendaris.',
+                        title: 'Kujang',
+                        description: 'Senjata tradisional khas Sunda.',
                         onMoreInfo: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (context) => WeaponDetailScreen(
+                                  (context) => const WeaponDetailScreen(
                                     name: "Kujang",
                                     imagePath: 'assets/images/kujang.png',
+                                    weaponDesc:
+                                        "Istilah kujang berasal dari kata ‘Kudhiyang’ dengan akar kata ‘Kudi’ dan ‘Hyang’. "
+                                        "Kudi diambil dari bahasa Sunda kuno yang berarti senjata yang memiliki kekuatan gaib, "
+                                        "sebagai jimat, dan sebagai penolak bala. Sedangkan, bagi masyarakat Sunda, Hyang mempunyai "
+                                        "arti dan kedudukan di atas dewa.",
+                                    weaponOrigin: "Jawa Barat",
+                                    weaponRarity: 4,
                                   ),
                             ),
                           );

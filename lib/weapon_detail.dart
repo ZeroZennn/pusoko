@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 class WeaponDetailScreen extends StatelessWidget {
   final String name;
   final String imagePath;
+  final String weaponDesc;
+  final String weaponOrigin;
+  final int weaponRarity;
 
   const WeaponDetailScreen({
     super.key,
     required this.name,
     required this.imagePath,
+    required this.weaponDesc,
+    required this.weaponOrigin,
+    required this.weaponRarity,
   });
 
   void _showWeaponBottomSheet(BuildContext context) {
@@ -30,7 +36,6 @@ class WeaponDetailScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      // Garis header
                       Container(
                         width: 40,
                         height: 5,
@@ -40,7 +45,6 @@ class WeaponDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Nama senjata
                       Text(
                         name,
                         style: const TextStyle(
@@ -49,12 +53,19 @@ class WeaponDetailScreen extends StatelessWidget {
                           letterSpacing: 1.2,
                         ),
                       ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Asal: $weaponOrigin",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
                       const SizedBox(height: 10),
-                      // Rarity (belah ketupat)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
-                          4,
+                          weaponRarity,
                           (index) => const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 2),
                             child: Icon(
@@ -66,31 +77,20 @@ class WeaponDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Deskripsi senjata
-                      const Text(
-                        "Istilah kujang berasal dari kata ‘Kudhiyang’ dengan akar kata ‘Kudi’ dan ‘Hyang’. "
-                        "Kudi diambil dari bahasa Sunda kuno yang berarti senjata yang memiliki kekuatan gaib, "
-                        "sebagai jimat, dan sebagai penolak bala. Sedangkan, bagi masyarakat Sunda, Hyang mempunyai "
-                        "arti dan kedudukan di atas dewa.",
+                      Text(
+                        weaponDesc,
                         textAlign: TextAlign.justify,
-                        style: TextStyle(fontSize: 16, height: 1.5),
+                        style: const TextStyle(fontSize: 16, height: 1.5),
                       ),
                       const SizedBox(height: 30),
-                      // Tombol close
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
                           padding: const EdgeInsets.all(18),
                           backgroundColor: const Color(0xFF543310),
                         ),
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 24,
-                        ),
+                        child: const Icon(Icons.close, color: Colors.white),
                       ),
                     ],
                   ),
@@ -107,31 +107,50 @@ class WeaponDetailScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFE6DCCF),
       body: Stack(
         children: [
-          // Hiasan tombol di atas halaman
+          // Gambar senjata dengan rasio tetap
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                20,
+                100,
+                20,
+                100,
+              ), // padding kiri, atas, kanan, bawah
+              child: AspectRatio(
+                aspectRatio:
+                    3 / 4, // Rasio :1 (persegi), bisa diganti sesuai kebutuhan
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(imagePath, fit: BoxFit.cover),
+                ),
+              ),
+            ),
+          ),
+
+          // Tombol kembali di pojok kiri atas
           Positioned(
             top: 40,
             left: 20,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+
+          // Tombol-tombol capsule
+          Positioned(
+            top: 40,
             right: 20,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _CapsuleIconButton(icon: Icons.menu_book, label: '0'),
+                _CapsuleIconButton(icon: Icons.diamond, label: '$weaponRarity'),
                 const SizedBox(width: 10),
                 _CapsuleIconButton(icon: Icons.language, label: '1'),
               ],
             ),
           ),
-          // Gambar utama
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 60),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(imagePath, fit: BoxFit.cover),
-              ),
-            ),
-          ),
-          // Tombol buka Bottom Sheet
+
+          // Tombol detail di bawah
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -161,7 +180,6 @@ class WeaponDetailScreen extends StatelessWidget {
   }
 }
 
-// Widget tambahan untuk tombol kapsul di bagian atas
 class _CapsuleIconButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -196,7 +214,7 @@ class _CapsuleIconButton extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const Icon(Icons.arrow_drop_down, size: 16, color: Colors.grey),
+          // const Icon(Icons.arrow_drop_down, size: 16, color: Colors.grey),
         ],
       ),
     );

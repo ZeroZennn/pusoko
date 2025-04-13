@@ -5,12 +5,18 @@ import 'custom_scaffold.dart';
 class WeaponCard extends StatelessWidget {
   final String name;
   final String imagePath;
+  final String weaponDesc;
+  final String weaponOrigin;
+  final int weaponRarity;
   final VoidCallback? onTap;
 
   const WeaponCard({
     super.key,
     required this.name,
     required this.imagePath,
+    required this.weaponDesc,
+    required this.weaponOrigin,
+    required this.weaponRarity,
     this.onTap,
   });
 
@@ -22,24 +28,25 @@ class WeaponCard extends StatelessWidget {
         aspectRatio: 0.65,
         child: Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), // 💡 Lebih lonjong
+            borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.white,
           elevation: 6,
           child: Padding(
-            padding: const EdgeInsets.all(12.0), // ✅ Padding simetris
+            padding: const EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Gambar dalam rasio tetap
                 Expanded(
-                  // ✅ Gambar fleksibel mengikuti tinggi card
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      16,
-                    ), // Rounded utk gambar
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.contain, // Gambar tidak terpotong
+                  child: AspectRatio(
+                    aspectRatio: 3 / 4,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover, // Penuhi seluruh area
+                      ),
                     ),
                   ),
                 ),
@@ -63,8 +70,128 @@ class WeaponCard extends StatelessWidget {
   }
 }
 
-class CollectionPageScreen extends StatelessWidget {
+class CollectionPageScreen extends StatefulWidget {
   const CollectionPageScreen({super.key});
+
+  @override
+  State<CollectionPageScreen> createState() => _CollectionPageScreenState();
+}
+
+class _CollectionPageScreenState extends State<CollectionPageScreen>
+    with TickerProviderStateMixin {
+  late final List<AnimationController> _controllers;
+  late final List<Animation<Offset>> _animations;
+
+  final List<Map<String, dynamic>> weapons = [
+    {
+      "name": "Kujang",
+      "imagePath": "assets/images/kujang.png",
+      "desc":
+          "Senjata tradisional khas Sunda, digunakan sebagai alat pertanian dan simbol kekuatan.",
+      "origin": "Jawa Barat",
+      "rarity": 5,
+    },
+    {
+      "name": "Keris",
+      "imagePath": "assets/images/keris.jpg",
+      "desc":
+          "Senjata tikam khas Nusantara dengan bentuk bilah berkelok dan nilai spiritual tinggi.",
+      "origin": "Jawa Tengah",
+      "rarity": 4,
+    },
+    {
+      "name": "Celurit",
+      "imagePath": "assets/images/celurit.png",
+      "desc":
+          "Senjata tajam berbentuk melengkung yang digunakan oleh masyarakat Madura.",
+      "origin": "Madura",
+      "rarity": 3,
+    },
+    {
+      "name": "Rencong",
+      "imagePath": "assets/images/rencong.jpg",
+      "desc":
+          "Senjata tradisional yang menjadi simbol keberanian masyarakat Aceh.",
+      "origin": "Aceh",
+      "rarity": 4,
+    },
+    {
+      "name": "Mandau",
+      "imagePath": "assets/images/mandau.jpg",
+      "desc":
+          "Senjata suku Dayak Kalimantan yang digunakan untuk berburu dan bertarung.",
+      "origin": "Kalimantan",
+      "rarity": 5,
+    },
+    {
+      "name": "Sundu",
+      "imagePath": "assets/images/sundu.jpg",
+      "desc":
+          "Senjata tradisional dari Sulawesi dengan bentuk khas dan ukiran etnik.",
+      "origin": "Sulawesi",
+      "rarity": 3,
+    },
+    {
+      "name": "Dohong",
+      "imagePath": "assets/images/dohong.jpg",
+      "desc": "Senjata pendek seperti pisau yang digunakan oleh suku Dayak.",
+      "origin": "Kalimantan Tengah",
+      "rarity": 2,
+    },
+    {
+      "name": "Golok",
+      "imagePath": "assets/images/golok.jpg",
+      "desc":
+          "Alat multifungsi untuk bertani dan bertahan hidup, dikenal luas di seluruh Nusantara.",
+      "origin": "Betawi / Jawa Barat",
+      "rarity": 2,
+    },
+    {
+      "name": "Wedhung",
+      "imagePath": "assets/images/wedhung.jpg",
+      "desc":
+          "Untuk membedakan antara kedua wedhung ini adalah mata pisaunya. Mata pisau dari wedhung Cirebon tidak ada dan terkesan cukup polos. Sedangkan untuk mata pisau dari wedhung Bali mempunyai motif – motif yang sangat apik. Material dari wedhung ini terbuat dari logam. Sedangkan untuk sarung / penutupnya terbuat dari kayu.",
+      "origin": "Bali",
+      "rarity": 3,
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(
+      9,
+      (index) => AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 500),
+      ),
+    );
+
+    _animations =
+        _controllers.map((controller) {
+          return Tween<Offset>(
+            begin: const Offset(0, 0.2),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
+        }).toList();
+
+    _startStaggeredAnimation();
+  }
+
+  void _startStaggeredAnimation() async {
+    for (var i = 0; i < _controllers.length; i++) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      _controllers[i].forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,50 +210,40 @@ class CollectionPageScreen extends StatelessWidget {
                 'My Weapon',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFFA46420), // Warna sesuai permintaan
+                  color: Color(0xFFA46420),
                 ),
               ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.help_outline, color: Colors.grey),
-                  onPressed: () {
-                    // Tambahkan aksi kalau mau
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
-            // Garis Gradient
             Container(
               height: 4,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF543310), // Kiri
-                    Color(0xFFBA7123), // Kanan
-                  ],
+                  colors: [Color(0xFF543310), Color(0xFFBA7123)],
                 ),
               ),
             ),
-            const SizedBox(height: 4), // Jarak kecil bawah garis
+            const SizedBox(height: 4),
           ],
         ),
       ),
-
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFFAF8F6F), Color(0xFFE6DCCF)],
+              colors: [Color.fromARGB(255, 218, 204, 186), Color(0xFFAF8F6F)],
             ),
           ),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 children: [
                   buildCardSearch("12", () {
@@ -137,6 +254,7 @@ class CollectionPageScreen extends StatelessWidget {
                     );
                   }),
                   const SizedBox(height: 16),
+
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -145,26 +263,39 @@ class CollectionPageScreen extends StatelessWidget {
                           MediaQuery.of(context).size.width > 600 ? 4 : 3,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      childAspectRatio:
-                          0.65, // Menyesuaikan AspectRatio di WeaponCard
+                      childAspectRatio: 0.65,
                     ),
-                    itemCount: 9,
+                    itemCount: weapons.length,
                     itemBuilder: (context, index) {
-                      return WeaponCard(
-                        name: "Kujang",
-                        imagePath: 'assets/images/kujang.png',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => WeaponDetailScreen(
-                                    name: "Kujang",
-                                    imagePath: 'assets/images/kujang.png',
-                                  ),
-                            ),
-                          );
-                        },
+                      final weapon = weapons[index];
+                      final name = weapon['name'];
+                      return SlideTransition(
+                        position: _animations[index],
+                        child: FadeTransition(
+                          opacity: _controllers[index],
+                          child: WeaponCard(
+                            name: name,
+                            imagePath: weapon['imagePath'],
+                            weaponDesc: weapon['desc'],
+                            weaponOrigin: weapon['origin'],
+                            weaponRarity: weapon['rarity'],
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => WeaponDetailScreen(
+                                        name: name,
+                                        imagePath: weapon['imagePath'],
+                                        weaponDesc: weapon['desc'],
+                                        weaponOrigin: weapon['origin'],
+                                        weaponRarity: weapon['rarity'],
+                                      ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -220,7 +351,7 @@ class CollectionPageScreen extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Color(0xFFA46420),
+                    color: const Color(0xFFA46420),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.sort, color: Colors.white),
@@ -232,13 +363,13 @@ class CollectionPageScreen extends StatelessWidget {
           Container(
             height: 40,
             decoration: BoxDecoration(
-              color: Color(0xFFF0F0F0),
+              color: const Color(0xFFF0F0F0),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
-                children: const [
+                children: [
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
