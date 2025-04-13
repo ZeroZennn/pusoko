@@ -190,16 +190,28 @@ class _TradeScreenState extends State<TradeScreen> {
                       ],
                     )
                   else
-                    Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      buildItem("Golok", "Rp2.110.000"),
-                      buildItem("Sumpit", "Rp900.000"),
-                      buildItem("Kujang", "Rp200.000"),
-                      buildItem("Cash", "Rp500.000", isCash: true),
-                    ],
-                  )
+                    Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildItem("Golok", "Rp2.110.000"),
+                              const SizedBox(width: 12),
+                              buildItem("Sumpit", "Rp900.000"),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildItem("Kujang", "Rp200.000"),
+                              const SizedBox(width: 12),
+                              buildItem("Cash", "Rp500.000", isCash: true),
+                            ],
+                          ),
+                        ],
+                      )
+
 
                 ],
               ),
