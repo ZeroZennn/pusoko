@@ -14,25 +14,25 @@ class HomePageScreen extends StatelessWidget {
       currentIndex: 0, // 0 = Home
       resizeToAvoidBottomInset: false,
       // AppBar
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80), // tinggi AppBar
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(80), // tinggi AppBar
+      //   child: AppBar(
+      //     backgroundColor: Colors.white,
+      //     elevation: 0,
 
-          // Posisikan logo di tengah AppBar
-          title: Center(
-            child: Image.asset(
-              'assets/images/logo.png',
-              height: 40, // kamu bisa sesuaikan ukuran logo
-              fit: BoxFit.contain,
-            ),
-          ),
+      //     // Posisikan logo di tengah AppBar
+      //     title: Center(
+      //       child: Image.asset(
+      //         'assets/images/logo.png',
+      //         height: 40, // kamu bisa sesuaikan ukuran logo
+      //         fit: BoxFit.contain,
+      //       ),
+      //     ),
 
-          // Kosongkan actions agar title tetap di tengah
-          actions: const [SizedBox()],
-        ),
-      ),
+      //     // Kosongkan actions agar title tetap di tengah
+      //     actions: const [SizedBox()],
+      //   ),
+      // ),
 
       // Scaffold background
       body: SafeArea(
@@ -42,8 +42,8 @@ class HomePageScreen extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFFAF8F6F), // bawah
-                Color(0xFFE6DCCF), // atas
+                Color(0xFFE6DCCF), //
+                Color(0xFFAF8F6F), // bawahatas
               ],
             ),
           ),
@@ -58,10 +58,42 @@ class HomePageScreen extends StatelessWidget {
                 bottom:
                     100.0, // beri jarak di bawah biar tidak nabrak BottomBar
               ),
+
               child: ListView(
                 shrinkWrap: true,
                 // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  // profile icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/profile',
+                          ); // pastikan rute sudah ada
+                        },
+                        child: Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Color(0xFFA46420),
+                              width: 4,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            color: Color(0xFFA46420),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 36), // Jarak antar baris
                   // Baris 1 (2 kolom)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -226,7 +258,8 @@ class HomePageScreen extends StatelessWidget {
       width: 400,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFE6DCCF),
+        color: Colors.white,
+
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -279,35 +312,32 @@ class HomePageScreen extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Row 2 - Search bar dengan inner shadow
           Stack(
             children: [
-              // Simulasi inner shadow pakai container transparan dengan gradient
+              // Warna latar F0F0F0
               Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFFF0F0F0),
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              // Overlay untuk efek inner shadow
+              // Efek inner shadow (gradient halus dari sisi luar ke tengah)
               Container(
                 height: 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
-                      Color.fromRGBO(0, 0, 0, 0.1), // shadow halus
-                      Colors.transparent,
-                      Colors.transparent,
-                      Color.fromRGBO(0, 0, 0, 0.1),
+                      Colors.black.withOpacity(0.08),
+                      Colors.black.withOpacity(0.08),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                 ),
               ),
-              // Content: TextField dan icon search
+              // Konten search bar: TextField + Icon
               Container(
                 height: 40,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -319,9 +349,13 @@ class HomePageScreen extends StatelessWidget {
                           hintText: "Search...",
                           border: InputBorder.none,
                         ),
+                        style: TextStyle(color: Colors.black87),
                       ),
                     ),
-                    const Icon(Icons.search, color: Color(0xFF74512D)),
+                    const Icon(
+                      Icons.search,
+                      color: Color(0xFF5C3D1E),
+                    ), // Sesuaikan dengan gambar
                   ],
                 ),
               ),
@@ -339,7 +373,7 @@ class HomePageScreen extends StatelessWidget {
       width: 190,
       height: 160,
       decoration: BoxDecoration(
-        color: const Color(0xFFE6DCCF),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -394,7 +428,8 @@ class HomePageScreen extends StatelessWidget {
   }) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      color: const Color(0xFFE6DCCF),
+      color: Colors.white,
+
       elevation: 6,
       child: SizedBox(
         width: 390,
@@ -448,6 +483,8 @@ class HomePageScreen extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFA46420),
+                          foregroundColor:
+                              Colors.white, // <== warna teks jadi putih
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
