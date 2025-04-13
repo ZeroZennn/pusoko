@@ -119,7 +119,7 @@ class CustomScaffold extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: isSelected ? Colors.brown : Colors.grey),
-              const SizedBox(height: 2),
+              const SizedBox(height: 4),
               Text(
                 label,
                 style: TextStyle(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'weapon_detail.dart';
 import 'custom_scaffold.dart';
 
-// Widget khusus untuk 1 card
 class WeaponCard extends StatelessWidget {
   final String name;
   final String imagePath;
@@ -21,28 +20,37 @@ class WeaponCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: Colors.white,
         elevation: 4,
-        child: Column(
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(12),
-                ),
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 12.0,
+          ), // Padding vertikal menyeluruh
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: 140,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

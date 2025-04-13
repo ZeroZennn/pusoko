@@ -10,73 +10,38 @@ class HomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return CustomScaffold(
-      currentIndex: 0, // 0 = Home
+      currentIndex: 0,
       resizeToAvoidBottomInset: false,
-      // AppBar
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(80), // tinggi AppBar
-      //   child: AppBar(
-      //     backgroundColor: Colors.white,
-      //     elevation: 0,
-
-      //     // Posisikan logo di tengah AppBar
-      //     title: Center(
-      //       child: Image.asset(
-      //         'assets/images/logo.png',
-      //         height: 40, // kamu bisa sesuaikan ukuran logo
-      //         fit: BoxFit.contain,
-      //       ),
-      //     ),
-
-      //     // Kosongkan actions agar title tetap di tengah
-      //     actions: const [SizedBox()],
-      //   ),
-      // ),
-
-      // Scaffold background
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFE6DCCF), //
-                Color(0xFFAF8F6F), // bawahatas
-              ],
+              colors: [Color(0xFFE6DCCF), Color(0xFFAF8F6F)],
             ),
           ),
-
-          // ======== Content Start ========
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom:
-                    100.0, // beri jarak di bawah biar tidak nabrak BottomBar
-              ),
-
-              child: ListView(
-                shrinkWrap: true,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 100.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // profile icon
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/profile',
-                          ); // pastikan rute sudah ada
+                          Navigator.pushNamed(context, '/profile');
                         },
                         child: Container(
-                          width: 64,
-                          height: 64,
+                          width: screenWidth * 0.15,
+                          height: screenWidth * 0.15,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white,
@@ -93,39 +58,45 @@ class HomePageScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 36), // Jarak antar baris
-                  // Baris 1 (2 kolom)
+                  const SizedBox(height: 36),
+
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildCardIcon("Exchange", Icons.swap_horiz, context),
-                      buildCardIcon("Trade", Icons.swap_horiz, context),
+                      Expanded(
+                        child: buildCardIcon(
+                          "Exchange",
+                          Icons.swap_horiz,
+                          context,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: buildCardIcon(
+                          "Trade",
+                          Icons.swap_horiz,
+                          context,
+                        ),
+                      ),
                     ],
                   ),
 
-                  const SizedBox(height: 16), // Jarak antar baris
-                  // Baris 2
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildCardSearch("12", () {
-                        // Aksi saat tombol sort ditekan
-                        showModalBottomSheet(
-                          context: context,
-                          builder:
-                              (context) =>
-                                  const Text("Pilihan sort di sini..."),
-                        );
-                      }),
-                    ],
-                  ),
-                  const SizedBox(height: 16), // Jarak antar baris
-                  // Baris 3
+                  const SizedBox(height: 16),
+                  buildCardSearch("12", () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder:
+                          (context) => const Text("Pilihan sort di sini..."),
+                    );
+                  }, screenWidth),
+
+                  const SizedBox(height: 16),
+
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: 180.0,
+                      height: screenHeight * 0.25,
                       autoPlay: true,
                       enlargeCenterPage: true,
+                      viewportFraction: 0.85,
                     ),
                     items:
                         ['image1.png', 'image1.png', 'image1.png'].map((
@@ -134,10 +105,7 @@ class HomePageScreen extends StatelessWidget {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
-                                width: MediaQuery.of(context).size.width * 1.0,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                ),
+                                width: screenWidth * 0.95,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
                                   image: DecorationImage(
@@ -151,11 +119,13 @@ class HomePageScreen extends StatelessWidget {
                         }).toList(),
                   ),
 
-                  // Baris 4
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildWeaponCard(
+                  const SizedBox(height: 16),
+
+                  ...List.generate(
+                    3,
+                    (_) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: buildWeaponCard(
                         imagePath: 'assets/images/kujang.png',
                         title: 'Katana Sakurai',
                         description: 'Pedang Jepang tajam legendaris.',
@@ -171,54 +141,9 @@ class HomePageScreen extends StatelessWidget {
                             ),
                           );
                         },
+                        screenWidth: screenWidth,
                       ),
-                    ],
-                  ),
-                  // Baris 5
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildWeaponCard(
-                        imagePath: 'assets/images/kujang.png',
-                        title: 'Katana Sakurai',
-                        description: 'Pedang Jepang tajam legendaris.',
-                        onMoreInfo: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => WeaponDetailScreen(
-                                    name: "Kujang",
-                                    imagePath: 'assets/images/kujang.png',
-                                  ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  // Baris 6
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildWeaponCard(
-                        imagePath: 'assets/images/kujang.png',
-                        title: 'Katana Sakurai',
-                        description: 'Pedang Jepang tajam legendaris.',
-                        onMoreInfo: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => WeaponDetailScreen(
-                                    name: "Kujang",
-                                    imagePath: 'assets/images/kujang.png',
-                                  ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -226,40 +151,19 @@ class HomePageScreen extends StatelessWidget {
           ),
         ),
       ),
-
-      backgroundColor: Colors.transparent, // supaya gradient terlihat
     );
   }
 
-  // Fungsi untuk membuat Card agar tidak duplikatif
-  Widget buildCard(String title, IconData icon) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 4,
-      child: SizedBox(
-        width: 300,
-        height: 80,
-        child: Center(
-          child: ListTile(
-            leading: Icon(icon, color: Colors.blue),
-            title: Text(
-              title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Fungsi untuk membuat Card agar tidak duplikatif
-  Widget buildCardSearch(String jumlah, VoidCallback onSortPressed) {
+  Widget buildCardSearch(
+    String jumlah,
+    VoidCallback onSortPressed,
+    double width,
+  ) {
     return Container(
-      width: 400,
+      width: width * 0.95,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -272,11 +176,9 @@ class HomePageScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row 1 - Icon Buku & Tombol Sort
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Kolom kiri: Icon buku dan angka
               Row(
                 children: const [
                   Icon(
@@ -294,8 +196,6 @@ class HomePageScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // Kolom kanan: Tombol sort
               GestureDetector(
                 onTap: onSortPressed,
                 child: Container(
@@ -309,68 +209,37 @@ class HomePageScreen extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
-          Stack(
-            children: [
-              // Warna latar F0F0F0
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF0F0F0),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              // Efek inner shadow (gradient halus dari sisi luar ke tengah)
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withOpacity(0.08),
-                      Colors.black.withOpacity(0.08),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-              // Konten search bar: TextField + Icon
-              Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: "Search...",
-                          border: InputBorder.none,
-                        ),
-                        style: TextStyle(color: Colors.black87),
+          Container(
+            height: 40,
+            decoration: BoxDecoration(
+              color: Color(0xFFF0F0F0),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: const [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Search...",
+                        border: InputBorder.none,
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Color(0xFF5C3D1E),
-                    ), // Sesuaikan dengan gambar
-                  ],
-                ),
+                  ),
+                  Icon(Icons.search, color: Color(0xFF5C3D1E)),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  // Fungsi untuk membuat Card trade agar tidak duplikatif
-
   Widget buildCardIcon(String title, IconData icon, BuildContext context) {
     final card = Container(
-      width: 190,
       height: 160,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -400,45 +269,38 @@ class HomePageScreen extends StatelessWidget {
       ),
     );
 
-    final interactiveCard = MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap:
-            title == "Trade"
-                ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const TradeScreen()),
-                  );
-                }
-                : null,
-        child: card,
-      ),
+    return GestureDetector(
+      onTap:
+          title == "Trade"
+              ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TradeScreen()),
+                );
+              }
+              : null,
+      child: card,
     );
-
-    return interactiveCard;
   }
 
-  // Fungsi untuk membuat WeaponCard agar bisa dipakai berulang
   Widget buildWeaponCard({
     required String imagePath,
     required String title,
     required String description,
     required VoidCallback onMoreInfo,
+    required double screenWidth,
   }) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       color: Colors.white,
-
       elevation: 6,
       child: SizedBox(
-        width: 390,
-        height: 130,
+        width: screenWidth * 0.95,
+        height: 150,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-              // Kolom kiri: Gambar senjata
               SizedBox(
                 width: 110,
                 height: double.infinity,
@@ -448,13 +310,11 @@ class HomePageScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-
-              // Kolom kanan: Teks + tombol
               Expanded(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Judul senjata
                     Text(
                       title,
                       style: const TextStyle(
@@ -464,8 +324,6 @@ class HomePageScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-
-                    // Deskripsi singkat
                     Text(
                       description,
                       style: const TextStyle(
@@ -475,16 +333,13 @@ class HomePageScreen extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const Spacer(),
-
-                    // Tombol more info
+                    const SizedBox(height: 8),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFA46420),
-                          foregroundColor:
-                              Colors.white, // <== warna teks jadi putih
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -499,37 +354,6 @@ class HomePageScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  // Tambahkan ini di dalam class widget kamu (HomePageScreen atau lainnya)
-  Widget buildNavItem(
-    IconData icon,
-    String label,
-    Widget targetScreen,
-    BuildContext context,
-  ) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => targetScreen),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: Colors.brown),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 11, color: Colors.brown),
-            ),
-          ],
         ),
       ),
     );
