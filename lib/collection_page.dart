@@ -18,38 +18,44 @@ class WeaponCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Colors.white,
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12.0,
-          ), // Padding vertikal menyeluruh
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.contain,
-                    width: double.infinity,
-                    height: 140,
+      child: AspectRatio(
+        aspectRatio: 0.65,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // 💡 Lebih lonjong
+          ),
+          color: Colors.white,
+          elevation: 6,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0), // ✅ Padding simetris
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  // ✅ Gambar fleksibel mengikuti tinggi card
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      16,
+                    ), // Rounded utk gambar
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.contain, // Gambar tidak terpotong
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                const SizedBox(height: 8),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    letterSpacing: 1,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -65,14 +71,47 @@ class CollectionPageScreen extends StatelessWidget {
     return CustomScaffold(
       currentIndex: 1,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: const Center(child: Text('My Collection')),
-          actions: const [SizedBox()],
+        preferredSize: const Size.fromHeight(70),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              centerTitle: true,
+              title: const Text(
+                'My Weapon',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFA46420), // Warna sesuai permintaan
+                ),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.help_outline, color: Colors.grey),
+                  onPressed: () {
+                    // Tambahkan aksi kalau mau
+                  },
+                ),
+              ],
+            ),
+            // Garis Gradient
+            Container(
+              height: 4,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF543310), // Kiri
+                    Color(0xFFBA7123), // Kanan
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 4), // Jarak kecil bawah garis
+          ],
         ),
       ),
+
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -98,20 +137,18 @@ class CollectionPageScreen extends StatelessWidget {
                     );
                   }),
                   const SizedBox(height: 16),
-
-                  // ======== Grid Senjata Start ========
                   GridView.builder(
                     shrinkWrap: true,
-                    physics:
-                        const NeverScrollableScrollPhysics(), // Biar scroll nya tetap di SingleChildScrollView
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // 3 kolom
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 0.7, // Sesuaikan tinggi-lebar card
-                        ),
-                    itemCount: 9, // Jumlah senjata yang mau ditampilkan
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          MediaQuery.of(context).size.width > 600 ? 4 : 3,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio:
+                          0.65, // Menyesuaikan AspectRatio di WeaponCard
+                    ),
+                    itemCount: 9,
                     itemBuilder: (context, index) {
                       return WeaponCard(
                         name: "Kujang",
@@ -131,7 +168,6 @@ class CollectionPageScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  // ======== Grid Senjata End ========
                 ],
               ),
             ),
@@ -143,10 +179,10 @@ class CollectionPageScreen extends StatelessWidget {
 
   Widget buildCardSearch(String jumlah, VoidCallback onSortPressed) {
     return Container(
-      width: 900,
+      width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -193,49 +229,28 @@ class CollectionPageScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Stack(
-            children: [
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromRGBO(0, 0, 0, 0.1),
-                      Colors.transparent,
-                      Colors.transparent,
-                      Color.fromRGBO(0, 0, 0, 0.1),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-              Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: "Search...",
-                          border: InputBorder.none,
-                        ),
+          Container(
+            height: 40,
+            decoration: BoxDecoration(
+              color: Color(0xFFF0F0F0),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: const [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Search...",
+                        border: InputBorder.none,
                       ),
                     ),
-                    const Icon(Icons.search, color: Color(0xFF74512D)),
-                  ],
-                ),
+                  ),
+                  Icon(Icons.search, color: Color(0xFF5C3D1E)),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
