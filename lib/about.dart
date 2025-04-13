@@ -1,138 +1,163 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'collection.dart';
-import 'scanner.dart';
-import 'profile.dart';
+import 'custom_scaffold.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFECECED),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                spreadRadius: 2,
-                blurRadius: 8,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-            title: Text(
-              "Tentang Pusoko",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.brown[700],
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+    return CustomScaffold(
+      currentIndex: 3,
+      backgroundColor: const Color(0xFFECECED),
+      body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Apa itu Pusoko?",
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // === Judul Halaman ===
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                alignment: Alignment.center,
+                child: Text(
+                  "Tentang Pusoko",
                   style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.brown[800],
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Pusoko adalah aplikasi mobile yang menjadi perpustakaan digital senjata tradisional Indonesia. "
-                  "Dengan teknologi pemindaian visual seperti Google Lens, pengguna dapat memindai senjata untuk mengetahui jenis dan nilai estimasinya.",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[800]),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Fitur Utama:",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                     color: Colors.brown[700],
                   ),
                 ),
-                SizedBox(height: 10),
-                _buildFeatureItem("🔍 Scan senjata tradisional dan identifikasi otomatis"),
-                _buildFeatureItem("📈 Lihat estimasi nilai atau value senjata"),
-                _buildFeatureItem("🛒 Jual beli senjata melalui marketplace"),
-                _buildFeatureItem("🤝 Trading antar pengguna"),
-                _buildFeatureItem("🔐 Login & Register untuk menyimpan data dan transaksi"),
-                SizedBox(height: 30),
-                Text(
-                  "Versi 1.0.0",
-                  style: TextStyle(color: Colors.grey),
+              ),
+
+              // === Container Gabungan Deskripsi + Fitur ===
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: _boxDecoration(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Apa itu Pusoko?
+                    Text(
+                      "Apa itu Pusoko?",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown[800],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Pusoko adalah aplikasi mobile yang menjadi perpustakaan digital senjata tradisional Indonesia. "
+                      "Dengan teknologi pemindaian visual seperti Google Lens, pengguna dapat memindai senjata untuk mengetahui jenis dan nilai estimasinya.",
+                      style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Fitur Utama:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown[700],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildFeatureItem("🔍 Scan senjata tradisional dan identifikasi otomatis"),
+                    _buildFeatureItem("📈 Lihat estimasi nilai atau value senjata"),
+                    _buildFeatureItem("🛒 Jual beli senjata melalui marketplace"),
+                    _buildFeatureItem("🤝 Trading antar pengguna"),
+                    _buildFeatureItem("🔐 Login & Register untuk menyimpan data dan transaksi"),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text(
-                  "Dikembangkan oleh Tim Pusoko © 2025",
-                  style: TextStyle(color: Colors.grey),
+              ),
+
+              const SizedBox(height: 20),
+
+              // === Container Tim Pengembang ===
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: _boxDecoration(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Tim Pengembang:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown[700],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    _buildDeveloperProfile(
+                      name: "Achmad Zikran Mauilda",
+                      role: "Programmer",
+                      imagePath: "assets/images/dev1.jpg",
+                      quote: '"Coding adalah seni menyusun logika menjadi kenyataan."',
+                    ),
+                    const SizedBox(height: 30),
+
+                    _buildDeveloperProfile(
+                      name: "Muhammad Arya Maulana",
+                      role: "UI/UX Designer",
+                      imagePath: "assets/images/dev2.jpg",
+                      quote: '"Desain bukan hanya estetika, tapi juga pengalaman."',
+                    ),
+                    const SizedBox(height: 30),
+
+                    _buildDeveloperProfile(
+                      name: "Muhammad Syukron Rizky Fadilla",
+                      role: "Backend Engineer",
+                      imagePath: "assets/images/dev3.jpg",
+                      quote: '"Logika di balik layar yang membuat segalanya berjalan."',
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 8,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 1.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(child: _buildNavItem(Icons.home, "Home", context, HomeScreen())),
-              Flexible(child: _buildNavItem(Icons.book, "Collection", context, CollectionScreen())),
-              Spacer(),
-              Flexible(child: _buildNavItem(Icons.info, "About", context, AboutScreen())),
-              Flexible(child: _buildNavItem(Icons.person, "Profile", context, ProfileScreen())),
+              ),
+
+              const SizedBox(height: 30),
+
+              // === Footer App Info ===
+              const Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "Versi 1.0.0",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "Dikembangkan oleh Tim Pusoko © 2025",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.brown,
-        shape: CircleBorder(),
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ScannerScreen())),
-        child: Icon(Icons.camera_alt, size: 28, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
+  // Box decoration reusable
+  BoxDecoration _boxDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 1,
+          blurRadius: 6,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    );
+  }
+
+  // Widget fitur utama
   Widget _buildFeatureItem(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -143,18 +168,64 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(
-      IconData icon, String label, BuildContext context, Widget screen) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          icon: Icon(icon, size: 34),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (_) => screen)),
-        ),
-        Text(label, style: TextStyle(fontSize: 0)),
-      ],
+  // Widget profil developer
+  Widget _buildDeveloperProfile({
+    required String name,
+    required String role,
+    required String imagePath,
+    required String quote,
+  }) {
+    return Center(
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundImage: AssetImage(imagePath),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown[800],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            role,
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              quote,
+              style: const TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const FaIcon(FontAwesomeIcons.instagram),
+                onPressed: () {},
+                color: Colors.pinkAccent,
+              ),
+              IconButton(
+                icon: const FaIcon(FontAwesomeIcons.github),
+                onPressed: () {},
+                color: Colors.black87,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
