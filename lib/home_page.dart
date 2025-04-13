@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'weapon_detail.dart';
 import 'trade.dart';
+import 'market.dart';
+
 
 import 'custom_scaffold.dart';
 
@@ -277,17 +279,22 @@ class HomePageScreen extends StatelessWidget {
     );
 
     return GestureDetector(
-      onTap:
-          title == "Trade"
-              ? () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const TradeScreen()),
-                );
-              }
-              : null,
-      child: card,
-    );
+        onTap: () {
+          if (title == "Trade") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const TradeScreen()),
+            );
+          } else if (title == "Exchange") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MarketScreen()),
+            );
+          }
+        },
+        child: card,
+      );
+
   }
 
   Widget buildWeaponCard({
