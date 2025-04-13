@@ -1,222 +1,296 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
-import 'scanner.dart';
-import 'about.dart';
-import 'profile.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CollectionScreen extends StatelessWidget {
-  const CollectionScreen({super.key});
+class ScannerScreen extends StatefulWidget {
+  const ScannerScreen({super.key});
+
+  @override
+  State<ScannerScreen> createState() => _ScannerScreenState();
+}
+
+class _ScannerScreenState extends State<ScannerScreen> {
+  Uint8List? _imageBytes;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _getImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _imageBytes = bytes;
+      });
+    }
+  }
+
+  Future<void> _getImageFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _imageBytes = bytes;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFECECED), // Warna latar belakang
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                spreadRadius: 2,
-                blurRadius: 8,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-            title: Text(
-              "My Weapon",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.brown[700],
-              ),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.help_outline, color: Colors.brown),
-                onPressed: () {},
-              ),
+      extendBodyBehindAppBar: true,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFBCAAA4), // brown[200]
+              Color(0xFF8D6E63), // brown[400]
             ],
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Kotak informasi jumlah senjata & pencarian
-            Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 6,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.menu_book, color: Colors.brown, size: 30),
-                  SizedBox(width: 8),
-                  Text(
-                    '9',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown[700],
-                    ),
-                  ),
-                  Spacer(),
-                  Icon(Icons.search, color: Colors.grey, size: 28),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            // Grid koleksi senjata
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // 3 kolom
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.7, // Proporsi kotak lebih tinggi
-                ),
-                itemCount: 9, // Jumlah item dalam koleksi
-                itemBuilder: (context, index) {
-                  return _buildWeaponCard();
-                },
-              ),
-            ),
-          ],
+        child: SafeArea(
+          child: _imageBytes != null ? _buildResultView() : _buildPickerView(),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 8,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 1.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(
-                child: _buildNavItem(
-                  Icons.home,
-                  "Home",
-                  context,
-                  HomePageScreen(),
-                ),
-              ),
-              Flexible(
-                child: _buildNavItem(
-                  Icons.book,
-                  "Collection",
-                  context,
-                  CollectionScreen(),
-                ),
-              ),
-              Spacer(),
-              Flexible(
-                child: _buildNavItem(
-                  Icons.info,
-                  "About",
-                  context,
-                  AboutScreen(),
-                ),
-              ),
-              Flexible(
-                child: _buildNavItem(
-                  Icons.person,
-                  "Profile",
-                  context,
-                  ProfileScreen(),
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          "Scan",
+          style: TextStyle(
+            color: Colors.brown,
+            fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.brown,
-        shape: CircleBorder(),
-        onPressed:
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => ScannerScreen()),
-            ),
-        child: Icon(Icons.camera_alt, size: 28, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
-  Widget _buildNavItem(
-    IconData icon,
-    String label,
-    BuildContext context,
-    Widget screen,
-  ) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+  Widget _buildResultView() {
+    return Stack(
       children: [
-        IconButton(
-          icon: Icon(icon, size: 34),
-          onPressed:
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => screen),
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              const Text(
+                "K u j a n g",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown,
+                  letterSpacing: 2,
+                ),
               ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(4, (index) {
+                  return const Icon(Icons.diamond, color: Colors.brown, size: 20);
+                }),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 32),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.brown, width: 3),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.memory(
+                    _imageBytes!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 150),
+            ],
+          ),
         ),
-        Text(label, style: TextStyle(fontSize: 0)),
+        DraggableScrollableSheet(
+          initialChildSize: 0.2,
+          minChildSize: 0.1,
+          maxChildSize: 0.85,
+          builder: (context, scrollController) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, -5),
+                  )
+                ],
+              ),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.brown,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Kujang",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      letterSpacing: 1,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(4, (index) {
+                      return const Icon(Icons.diamond, color: Colors.brown, size: 16);
+                    }),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    "4.0",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Istilah kujang berasal dari kata ‘Kudhiayang’ dengan akar kata ‘Kudi’ dan ‘Hyang’. "
+                    "Kudi diambil dari bahasa Sunda kuno yang berarti senjata yang memiliki kekuatan gaib, "
+                    "sebagai jimat, dan sebagai penolak bala. Sedangkan, bagi masyarakat Sunda, Hyang mempunyai "
+                    "arti dan kedudukan di atas dewa.\n\n"
+                    "Kujang adalah simbol kehormatan dan keberanian dalam budaya Sunda, sering dijadikan lambang perjuangan. "
+                    "Senjata ini memiliki bentuk unik dan filosofi mendalam, digunakan juga sebagai simbol identitas budaya.",
+                    style: TextStyle(color: Colors.black87, height: 1.5),
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _imageBytes = null;
+                          });
+                        },
+                        child: const Text(
+                          "back",
+                          style: TextStyle(color: Colors.brown, fontSize: 16),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          // simpan aksi
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          child: Text("save to collection"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          },
+        ),
       ],
     );
   }
 
-  Widget _buildWeaponCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: Offset(0, 4),
+  Widget _buildPickerView() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Expanded(
+          child: Center(
+            child: Icon(Icons.image_outlined, size: 100, color: Colors.grey),
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(
-              color: Colors.grey[300], // Placeholder gambar
-              child: Icon(Icons.image, size: 50, color: Colors.grey),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _bottomButton(
+                icon: Icons.image,
+                label: "Image",
+                onTap: _getImageFromGallery,
+                isActive: false,
+              ),
+              _bottomButton(
+                icon: Icons.camera_alt,
+                label: "Scan",
+                onTap: _getImageFromCamera,
+                isActive: true,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _bottomButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required bool isActive,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 140,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          gradient: isActive
+              ? const LinearGradient(
+                  colors: [
+                    Color(0xFFBCAAA4), // brown[200]
+                    Color(0xFF8D6E63), // brown[400]
+                  ],
+                )
+              : null,
+          color: isActive ? null : const Color(0xfffdf8ee),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.brown.withOpacity(0.2)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: isActive ? Colors.white : Colors.brown),
+            const SizedBox(height: 5),
+            Text(
+              label,
+              style: TextStyle(
+                color: isActive ? Colors.white : Colors.brown,
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            "Kujang",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[700],
-            ),
-          ),
-          SizedBox(height: 8),
-        ],
+          ],
+        ),
       ),
     );
   }
