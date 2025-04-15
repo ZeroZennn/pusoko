@@ -57,50 +57,61 @@ class _MarketScreenState extends State<MarketScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          // FILTERS SECTION
-          Container(
-            margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              children: [
-                CheckboxListTile(
-                  value: newest,
-                  onChanged: (val) => setState(() => newest = val!),
-                  title: const Text("Newest"),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                CheckboxListTile(
-                  value: oldest,
-                  onChanged: (val) => setState(() => oldest = val!),
-                  title: const Text("Oldest"),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                CheckboxListTile(
-                  value: priceMax,
-                  onChanged: (val) => setState(() => priceMax = val!),
-                  title: const Text("Price: MAX"),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                CheckboxListTile(
-                  value: priceMin,
-                  onChanged: (val) => setState(() => priceMin = val!),
-                  title: const Text("Price: MIN"),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-              ],
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFE6DCCF), Color(0xFFAF8F6F)],
             ),
           ),
-          const SizedBox(height: 8),
+          child: Column(
+            children: [
+              // FILTERS SECTION
+              Container(
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    CheckboxListTile(
+                      value: newest,
+                      onChanged: (val) => setState(() => newest = val!),
+                      title: const Text("Newest"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                    CheckboxListTile(
+                      value: oldest,
+                      onChanged: (val) => setState(() => oldest = val!),
+                      title: const Text("Oldest"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                    CheckboxListTile(
+                      value: priceMax,
+                      onChanged: (val) => setState(() => priceMax = val!),
+                      title: const Text("Price: MAX"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                    CheckboxListTile(
+                      value: priceMin,
+                      onChanged: (val) => setState(() => priceMin = val!),
+                      title: const Text("Price: MIN"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
 
-          // MARKET CONTENT
-          Expanded(child: MarketPageScreen()),
-        ],
+              // MARKET CONTENT
+              Expanded(child: MarketPageScreen()),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
