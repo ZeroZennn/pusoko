@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'home.dart';
+import 'collection.dart';
 import 'scanner.dart';
 import 'about.dart';
 import 'profile.dart';
@@ -103,7 +105,7 @@ class _MarketScreenState extends State<MarketScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
+        shape: CircularNotchedRectangle(),
         notchMargin: 8,
         color: Colors.white,
         child: Padding(
@@ -111,51 +113,21 @@ class _MarketScreenState extends State<MarketScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(
-                child: _buildNavItem(
-                  Icons.home,
-                  "Home",
-                  context,
-                  const HomePageScreen(),
-                ),
-              ),
-              Flexible(
-                child: _buildNavItem(
-                  Icons.book,
-                  "Collection",
-                  context,
-                  const MarketScreen(),
-                ),
-              ),
-              const Spacer(),
-              Flexible(
-                child: _buildNavItem(
-                  Icons.info,
-                  "About",
-                  context,
-                  const AboutScreen(),
-                ),
-              ),
-              Flexible(
-                child: _buildNavItem(
-                  Icons.person,
-                  "Profile",
-                  context,
-                  const ProfileScreen(),
-                ),
-              ),
+              Flexible(child: _buildNavItem(Icons.home, "Home", context, HomeScreen())),
+              Flexible(child: _buildNavItem(Icons.book, "Collection", context, CollectionScreen())),
+              Spacer(),
+              Flexible(child: _buildNavItem(Icons.info, "About", context, AboutScreen())),
+              Flexible(child: _buildNavItem(Icons.person, "Profile", context, ProfileScreen())),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.brown,
-        shape: const CircleBorder(),
+        shape: CircleBorder(),
         onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const ScannerScreen()),
-        ),
-        child: const Icon(Icons.camera_alt, size: 28, color: Colors.white),
+            context, MaterialPageRoute(builder: (_) => ScannerScreen())),
+        child: Icon(Icons.camera_alt, size: 28, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
