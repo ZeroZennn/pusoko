@@ -9,6 +9,25 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       currentIndex: 3,
+      appBar: AppBar(
+        title: const Text(
+          'Tentang Aplikasi',
+          style: TextStyle(
+            color: Color(0xFF74512D),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF74512D)),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/home');
+          },
+        ),
+
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
