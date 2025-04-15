@@ -66,7 +66,7 @@ class HomePageScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: buildCardIcon(
-                          "Exchange",
+                          "Market",
                           Icons.swap_horiz,
                           context,
                         ),
@@ -285,7 +285,7 @@ class HomePageScreen extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (_) => const TradeScreen()),
             );
-          } else if (title == "Exchange") {
+          } else if (title == "Market") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const MarketScreen()),
