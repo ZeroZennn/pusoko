@@ -33,7 +33,7 @@ class _TradeScreenState extends State<TradeScreen> {
           Padding(
             padding: EdgeInsets.only(right: 16.0),
             child: Icon(Icons.help_outline, color: Color(0xFF74512D)),
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -47,7 +47,7 @@ class _TradeScreenState extends State<TradeScreen> {
           ),
           child: Column(
             children: [
-              // FILTERS (TETAP DI ATAS)
+              // FILTERS
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 padding: const EdgeInsets.all(16),
@@ -91,7 +91,6 @@ class _TradeScreenState extends State<TradeScreen> {
                 child: ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   children: [
-                    // TRADE CARD 1
                     buildTradeCard(
                       username: "Syukron",
                       offeredWeapon: "Keris",
@@ -103,8 +102,6 @@ class _TradeScreenState extends State<TradeScreen> {
                       expiresOn: "29 Mar",
                     ),
                     const SizedBox(height: 12),
-
-                    // TRADE CARD 2
                     buildTradeCard(
                       username: "Arya",
                       offeredWeapon: "Mandau",
@@ -156,28 +153,32 @@ class _TradeScreenState extends State<TradeScreen> {
           const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               // Offered
-              Column(
-                children: [
-                  const Text("Offered:"),
-                  const SizedBox(height: 6),
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(offeredImage ?? ''),
-                        fit: BoxFit.cover,
+              Expanded(
+                child: Column(
+                  children: [
+                    const Text("Offered:"),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        image: offeredImage != null
+                            ? DecorationImage(
+                                image: AssetImage(offeredImage),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey[300],
                       ),
-                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(offeredWeapon),
-                  Text(offeredPrice),
-                ],
+                    const SizedBox(height: 8),
+                    Text(offeredWeapon, textAlign: TextAlign.center),
+                    Text(offeredPrice, textAlign: TextAlign.center),
+                  ],
+                ),
               ),
 
               // Arrow
@@ -188,84 +189,68 @@ class _TradeScreenState extends State<TradeScreen> {
               ),
 
               // Requested
-              Column(
-                children: [
-                  const Text("For your:"),
-                  const SizedBox(height: 6),
-                  if (!isMultiItem)
-                    Column(
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(requestedImage ?? ''),
-                              fit: BoxFit.cover,
+              Expanded(
+                child: Column(
+                  children: [
+                    const Text("For your:"),
+                    const SizedBox(height: 6),
+                    if (!isMultiItem)
+                      Column(
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              image: requestedImage != null
+                                  ? DecorationImage(
+                                      image: AssetImage(requestedImage),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[300],
                             ),
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(requestedWeapon ?? ""),
-                        Text(requestedPrice ?? ""),
-                      ],
-                    )
-                  else
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            buildItem("Golok", "Rp2.110.000", "assets/images/golok.jpg"),
-                            const SizedBox(width: 12),
-                            buildItem("Kujang", "Rp900.000", "assets/images/kujang.png"),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            buildItem("Sundu", "Rp900.000", "assets/images/sundu.jpg"),
-                            const SizedBox(width: 12),
-                            buildItem("Cash", "Rp500.000", null, isCash: true),
-                          ],
-                        ),
-                      ],
-                    )
-                ],
+                          const SizedBox(height: 8),
+                          Text(requestedWeapon ?? "", textAlign: TextAlign.center),
+                          Text(requestedPrice ?? "", textAlign: TextAlign.center),
+                        ],
+                      )
+                    else
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          buildItem("Golok", "Rp2.110.000", "assets/images/golok.jpg"),
+                          buildItem("Kujang", "Rp900.000", "assets/images/kujang.png"),
+                          buildItem("Sundu", "Rp900.000", "assets/images/sundu.jpg"),
+                          buildItem("Cash", "Rp500.000", null, isCash: true),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12),
+          Text("Offer expires on $expiresOn"),
+          const SizedBox(height: 8),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("Offer expires on $expiresOn"),
-              Row(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                    ),
-                    onPressed: () {},
-                    child: const Text(
-                      "Decline",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFA46420),
-                    ),
-                    onPressed: () {},
-                    child: const Text(
-                      "Accept",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                onPressed: () {},
+                child: const Text("Decline", style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFA46420),
+                ),
+                onPressed: () {},
+                child: const Text("Accept", style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -274,33 +259,35 @@ class _TradeScreenState extends State<TradeScreen> {
     );
   }
 
-  Widget buildItem(String name, String price, String? imagePath,
-      {bool isCash = false}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: isCash ? Colors.amber[100] : Colors.grey[300],
-            borderRadius: BorderRadius.circular(8),
-            image: !isCash && imagePath != null
-                ? DecorationImage(
-                    image: AssetImage(imagePath), fit: BoxFit.cover)
-                : null,
-          ),
-          child: isCash
-              ? const Icon(Icons.attach_money,
-                  size: 28, color: Colors.green)
-              : imagePath == null
-                  ? const Icon(Icons.image)
+  Widget buildItem(String name, String price, String? imagePath, {bool isCash = false}) {
+    return SizedBox(
+      width: 80,
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: isCash ? Colors.amber[100] : Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+              image: !isCash && imagePath != null
+                  ? DecorationImage(
+                      image: AssetImage(imagePath),
+                      fit: BoxFit.cover,
+                    )
                   : null,
-        ),
-        const SizedBox(height: 4),
-        Text(name, style: const TextStyle(fontSize: 12)),
-        Text(price, style: const TextStyle(fontSize: 12)),
-      ],
+            ),
+            child: isCash
+                ? const Icon(Icons.attach_money, size: 28, color: Colors.green)
+                : imagePath == null
+                    ? const Icon(Icons.image)
+                    : null,
+          ),
+          const SizedBox(height: 4),
+          Text(name, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center),
+          Text(price, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center),
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'weapon_detail.dart';
 import 'trade.dart';
 import 'market.dart';
+import 'profile.dart';
 
 
 import 'custom_scaffold.dart';

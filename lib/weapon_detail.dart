@@ -69,7 +69,7 @@ class WeaponDetailScreen extends StatelessWidget {
                           (index) => const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 2),
                             child: Icon(
-                              Icons.diamond,
+                              Icons.star,
                               color: Color(0xFF543310),
                               size: 20,
                             ),
@@ -143,7 +143,7 @@ class WeaponDetailScreen extends StatelessWidget {
             right: 20,
             child: Row(
               children: [
-                _CapsuleIconButton(icon: Icons.diamond, label: '$weaponRarity'),
+                _CapsuleIconButton(icon: Icons.star, label: '$weaponRarity'),
                 const SizedBox(width: 10),
                 _CapsuleIconButton(icon: Icons.language, label: '1'),
               ],
