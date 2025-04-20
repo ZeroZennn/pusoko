@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'dart:async';
 import 'login.dart';
+import 'profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Pusoko',
-      home: const SplashScreen(), // Ubah jadi SplashScreen
+      home: const SplashScreen(),
+      routes: {
+        '/profile': (context) => const ProfileScreen(), // tambahkan route ini
+      },
     );
   }
 }

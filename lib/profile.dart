@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'custom_scaffold.dart';
+import 'login.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -31,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 16.0),
             child: Icon(Icons.help_outline, color: Color(0xFF74512D)),
-          )
+          ),
         ],
       ),
       body: Container(
@@ -73,8 +74,9 @@ class ProfileScreen extends StatelessWidget {
                                 children: [
                                   const CircleAvatar(
                                     radius: 50,
-                                    backgroundImage:
-                                        AssetImage('assets/images/user_avatar.jpg'),
+                                    backgroundImage: AssetImage(
+                                      'assets/images/user_avatar.jpg',
+                                    ),
                                   ),
                                   const SizedBox(height: 16),
                                   Text(
@@ -88,12 +90,18 @@ class ProfileScreen extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   const Text(
                                     "VirginiaMahardika@gmail.com",
-                                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                   const SizedBox(height: 20),
                                   const Text(
                                     "Saya kolektor sepuh senjata tradisional.",
-                                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                   const SizedBox(height: 24),
@@ -104,21 +112,33 @@ class ProfileScreen extends StatelessWidget {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.brown[700],
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 12),
+                                        horizontal: 24,
+                                        vertical: 12,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
                                     child: const Text(
                                       "Ubah Profil",
-                                      style: TextStyle(color: Colors.white, fontSize: 16),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 12),
                                   TextButton(
                                     onPressed: () {
-                                      // Aksi logout
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => const LoginScreen(),
+                                        ),
+                                      );
                                     },
+
                                     child: const Text(
                                       "Keluar",
                                       style: TextStyle(color: Colors.red),

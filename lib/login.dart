@@ -23,8 +23,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      resizeToAvoidBottomInset:
+          true, // penting agar layout menyesuaikan keyboard
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 40,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 40,
+        ),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -55,8 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   TextSpan(
                     text: 'User',
-                    style: TextStyle(color: Color(0xFF8A5A1F),
-                    fontWeight: FontWeight.normal,),
+                    style: TextStyle(
+                      color: Color(0xFF8A5A1F),
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ],
               ),
@@ -165,8 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
-            const Spacer(),
-
+            const SizedBox(height: 40), // pengganti Spacer
             // Register
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
