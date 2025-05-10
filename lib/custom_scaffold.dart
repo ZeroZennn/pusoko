@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import 'collection.dart';
+import 'collection_page.dart';
 import 'about.dart';
 import 'profile.dart';
 import 'scanner.dart';
@@ -28,7 +28,7 @@ class CustomScaffold extends StatelessWidget {
         target = const HomePageScreen();
         break;
       case 1:
-        target = const CollectionScreen();
+        target = const CollectionPageScreen();
         break;
       case 2:
         return;
@@ -119,7 +119,7 @@ class CustomScaffold extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: isSelected ? Colors.brown : Colors.grey),
-              const SizedBox(height: 2),
+              const SizedBox(height: 4),
               Text(
                 label,
                 style: TextStyle(
